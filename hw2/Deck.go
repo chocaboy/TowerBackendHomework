@@ -37,18 +37,41 @@ func (temp *temp) AddBack(number int) {
 	}
 }
 
-func (temp *temp) PopFront() {
-	fmt.Println(temp.left.number, "was popped")
-	temp.left.next.prev = nil
-	temp.left = temp.left.next
-}
-func (temp *temp) PopBack() {
-	fmt.Println(temp.right.number, "was popped")
-	temp.right.prev.next = nil
-	temp.right = temp.right.prev
+func (temp *temp) PopFront() (int, bool) {
+	if temp.left == nil {
+		fmt.Println("No elements")
+		return 0, false
+	}
+	pop_num := temp.left.number
+	if temp.left != temp.right {
+		temp.left = temp.left.next
+		temp.left.prev = nil
+	} else {
+		temp.right = nil
+		temp.left = nil
+	}
+	fmt.Println(pop_num, "was popped")
+	return pop_num, true
 }
 
-func (temp *temp) IsExist(number int) {
+func (temp *temp) PopBack() (int, bool) {
+	if temp.right == nil {
+		fmt.Println("No elements")
+		return 0, false
+	}
+	pop_num := temp.right.number
+	if temp.left != temp.right {
+		temp.right = temp.right.prev
+		temp.right.next = nil
+	} else {
+		temp.left = nil
+		temp.right = nil
+	}
+	fmt.Println(pop_num, "was popped")
+	return pop_num, true
+}
+
+func (temp *temp) IsExist(number int) bool {
 	now := temp.left
 	flag := false
 	for now != nil {
@@ -60,8 +83,10 @@ func (temp *temp) IsExist(number int) {
 	}
 	if flag {
 		fmt.Println(number, "is exist")
+		return true
 	} else {
 		fmt.Println(number, "is not exist")
+		return false
 	}
 }
 
@@ -76,14 +101,15 @@ func (temp *temp) PrintuyEmae() {
 
 func main() {
 	temp := temp{}
+	fmt.Println(temp.PopBack())
+	temp.AddBack(5)
+	temp.PrintuyEmae()
+	fmt.Println(temp.PopBack())
+	temp.PrintuyEmae()
 	temp.AddBack(5)
 	temp.AddBack(10)
-	temp.PrintuyEmae()
 	temp.AddBack(15)
-	temp.AddFront(52)
 	temp.PrintuyEmae()
-	temp.PopBack()
-	temp.PrintuyEmae()
-	temp.PopFront()
-	temp.PrintuyEmae()
+	fmt.Println(temp.PopBack())
+	fmt.Println(temp.PopFront())
 }
